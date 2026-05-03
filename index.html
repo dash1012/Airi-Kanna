@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Airi Kanna - The Final Chapter</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;700&family=Playfair+Display:italic,wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #a5d8ff;
+            --deep-blue: #1a2a6c;
+            --text-white: #ffffff;
+            --soft-gray: #f8f9fa;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            background-color: #000;
+            font-family: 'Noto Sans KR', sans-serif;
+            color: var(--text-white);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* 배경 애니메이션: 별빛 */
+        .stars-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
+            z-index: -1;
+        }
+
+        /* Hero Section */
+        header {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .title {
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            margin-bottom: 10px;
+            letter-spacing: 5px;
+            opacity: 0;
+            animation: fadeInDown 2s forwards;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            font-weight: 300;
+            color: var(--primary-blue);
+            opacity: 0;
+            animation: fadeInUp 2s forwards 0.5s;
+        }
+
+        /* Content Section */
+        .content-section {
+            max-width: 800px;
+            margin: 100px auto;
+            padding: 40px 20px;
+            line-height: 1.8;
+            text-align: center;
+        }
+
+        .final-message {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 50px;
+            border-radius: 20px;
+            border: 1px solid rgba(165, 216, 255, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        h2 {
+            color: var(--primary-blue);
+            border-bottom: 2px solid var(--primary-blue);
+            display: inline-block;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+
+        .lyric-box {
+            font-style: italic;
+            color: #ddd;
+            margin: 40px 0;
+            font-size: 1.1rem;
+        }
+
+        /* Footer */
+        footer {
+            padding: 50px 0;
+            text-align: center;
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 눈 내리는 효과 (별빛 대용) */
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.5;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            to { transform: translateY(100vh); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="stars-container" id="stars-container"></div>
+
+    <header>
+        <div class="title">AIRI KANNA</div>
+        <div class="subtitle">마지막 페이지, 그리고 새로운 시작</div>
+    </header>
+
+    <main class="content-section">
+        <div class="final-message">
+            <h2>The Last Live</h2>
+            <p>푸른 비늘을 반짝이며 우리 곁을 찾아왔던 용소녀,<br>
+            그녀가 들려준 수많은 노래와 웃음은 이제 우리의 기억 속에 소중한 별이 되었습니다.</p>
+            
+            <div class="lyric-box">
+                "함께 보낸 시간들이 흩어지는 것이 아니라,<br>
+                여러분의 마음속에서 영원히 빛나길 바랍니다."
+            </div>
+
+            <p>아이리 칸나의 최종화를 축하하며,<br>
+            앞으로 걷게 될 모든 길에 축복이 가득하기를 기원합니다.</p>
+        </div>
+    </main>
+
+    <footer>
+        <p>Remember Airi Kanna | Dedicated to the Blue Dragon</p>
+        <p>&copy; 2024 Kanna's Final Chapter Fan Page</p>
+    </footer>
+
+    <script>
+        // 배경에 별 생성
+        function createStars() {
+            const container = document.getElementById('stars-container');
+            const starCount = 150;
+
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                
+                const size = Math.random() * 3 + 'px';
+                star.style.width = size;
+                star.style.height = size;
+                
+                star.style.left = Math.random() * 100 + 'vw';
+                star.style.top = Math.random() * 100 + 'vh';
+                
+                const duration = Math.random() * 3 + 2 + 's';
+                star.style.animationDuration = duration;
+                star.style.opacity = Math.random();
+
+                container.appendChild(star);
+            }
+        }
+
+        createStars();
+    </script>
+</body>
+</html>
