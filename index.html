@@ -3,34 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Airi Kanna: The Eternal Blue Dragon</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700&family=Playfair+Display:italic,wght@700&display=swap" rel="stylesheet">
+    <title>아이리 칸나 | 영원한 푸른 용의 기록</title>
+    <!-- 폰트: 나눔명조 및 프리텐다드 -->
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --kanna-blue: #a5d8ff;
-            --deep-ocean: #0f172a;
-            --accent-gold: #ffd700;
-            --text-white: #f8fafc;
+            --kanna-blue-light: #e3f2fd;
+            --kanna-blue: #74c0fc;
+            --kanna-blue-deep: #1971c2;
+            --bg-dark: #020617;
+            --glass: rgba(255, 255, 255, 0.05);
+            --border: rgba(165, 216, 255, 0.2);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            background-color: var(--deep-ocean);
-            color: var(--text-white);
-            font-family: 'Noto Sans KR', sans-serif;
-            line-height: 1.6;
+            background-color: var(--bg-dark);
+            color: #f8fafc;
+            font-family: 'Pretendard', sans-serif;
             overflow-x: hidden;
+            line-height: 1.7;
         }
 
-        /* Background Stars */
-        #stars {
+        /* --- 배경 효과 --- */
+        #nebula {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1;
-            background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+            z-index: -2;
+            background: radial-gradient(circle at 50% 50%, #1e3a8a 0%, #020617 100%);
         }
+        canvas#stars { position: fixed; top: 0; left: 0; z-index: -1; pointer-events: none; }
 
-        /* Hero Section */
+        /* --- 레이아웃 --- */
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+
+        /* --- 헤더 --- */
         header {
             height: 100vh;
             display: flex;
@@ -38,272 +46,302 @@
             justify-content: center;
             align-items: center;
             text-align: center;
-            padding: 20px;
+        }
+        .symbol { width: 80px; height: auto; margin-bottom: 20px; filter: drop-shadow(0 0 10px var(--kanna-blue)); }
+        .main-title { 
+            font-family: 'Nanum Myeongjo', serif; 
+            font-size: clamp(2.5rem, 8vw, 5rem); 
+            font-weight: 800;
+            background: linear-gradient(to bottom, #fff, var(--kanna-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
         }
 
-        .hero-title {
-            font-family: 'Playfair Display', serif;
-            font-size: clamp(3rem, 10vw, 6rem);
-            color: var(--kanna-blue);
-            text-shadow: 0 0 20px rgba(165, 216, 255, 0.5);
-            margin-bottom: 10px;
-        }
-
-        .hero-sub {
-            font-size: 1.2rem;
-            letter-spacing: 3px;
-            opacity: 0.8;
-        }
-
-        /* Section Styling */
-        section {
-            max-width: 1000px;
-            margin: 100px auto;
-            padding: 20px;
-        }
-
-        h2 {
+        /* --- 섹션 공통 --- */
+        section { padding: 100px 0; border-bottom: 1px solid var(--border); }
+        h2.sec-title {
+            font-family: 'Nanum Myeongjo', serif;
             font-size: 2.5rem;
-            text-align: center;
             margin-bottom: 50px;
+            text-align: center;
             color: var(--kanna-blue);
-            text-transform: uppercase;
-            border-bottom: 1px solid rgba(165, 216, 255, 0.3);
-            display: block;
-            padding-bottom: 10px;
         }
 
-        /* Timeline */
-        .timeline {
-            position: relative;
-            padding: 20px 0;
+        /* --- 프로필 --- */
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            background: var(--glass);
+            padding: 40px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
         }
+        .profile-info h3 { font-size: 1.8rem; margin-bottom: 20px; color: var(--kanna-blue-light); }
+        .profile-info ul { list-style: none; }
+        .profile-info li { margin-bottom: 12px; font-size: 1.1rem; }
+        .profile-info li b { color: var(--kanna-blue); width: 100px; display: inline-block; }
 
-        .timeline-item {
-            margin-bottom: 40px;
-            padding-left: 30px;
-            border-left: 2px solid var(--kanna-blue);
-            position: relative;
+        /* --- 타임라인 (대규모) --- */
+        .history-list { position: relative; padding-left: 20px; }
+        .history-list::before {
+            content: ''; position: absolute; left: 0; top: 0; width: 2px; height: 100%;
+            background: linear-gradient(to bottom, transparent, var(--kanna-blue), transparent);
         }
-
-        .timeline-item::before {
-            content: '';
-            position: absolute;
-            left: -9px;
-            top: 0;
-            width: 16px;
-            height: 16px;
-            background: var(--kanna-blue);
-            border-radius: 50%;
-            box-shadow: 0 0 10px var(--kanna-blue);
+        .history-item { margin-bottom: 40px; position: relative; padding-left: 30px; }
+        .history-item::after {
+            content: ''; position: absolute; left: -6px; top: 10px; width: 14px; height: 14px;
+            background: var(--kanna-blue); border-radius: 50%; box-shadow: 0 0 10px var(--kanna-blue);
         }
+        .history-date { font-weight: 800; color: var(--kanna-blue); font-size: 1.2rem; }
+        .history-content { background: rgba(255,255,255,0.03); padding: 15px; border-radius: 10px; margin-top: 5px; }
 
-        .date { font-weight: bold; color: var(--kanna-blue); margin-bottom: 5px; }
-        .event-title { font-size: 1.2rem; font-weight: 700; }
-        .event-desc { font-size: 0.95rem; opacity: 0.8; }
-
-        /* Music Grid */
+        /* --- 뮤직 아카이브 (Grid) --- */
+        .music-category { margin-bottom: 60px; }
+        .category-name { font-size: 1.5rem; margin-bottom: 20px; border-left: 4px solid var(--kanna-blue); padding-left: 15px; }
         .music-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
         }
-
         .music-card {
-            background: rgba(255, 255, 255, 0.05);
+            background: var(--glass);
+            border: 1px solid var(--border);
             border-radius: 15px;
             padding: 20px;
-            transition: transform 0.3s;
-            border: 1px solid rgba(165, 216, 255, 0.1);
             text-decoration: none;
             color: inherit;
+            transition: 0.3s;
         }
+        .music-card:hover { background: rgba(116, 192, 252, 0.15); transform: translateY(-5px); }
+        .m-title { display: block; font-weight: bold; font-size: 1.1rem; margin-bottom: 5px; }
+        .m-desc { font-size: 0.9rem; opacity: 0.7; }
 
-        .music-card:hover {
-            transform: translateY(-10px);
-            background: rgba(165, 216, 255, 0.1);
-        }
-
-        .music-type {
-            font-size: 0.7rem;
-            background: var(--kanna-blue);
-            color: #000;
-            padding: 2px 8px;
-            border-radius: 10px;
-            font-weight: bold;
-        }
-
-        .music-name { font-size: 1.2rem; margin: 10px 0; display: block; }
-        .music-info { font-size: 0.85rem; opacity: 0.7; }
-
-        /* Final Message */
-        .final-chapter {
+        /* --- 업적/어록 --- */
+        .quote-card {
             text-align: center;
-            background: rgba(165, 216, 255, 0.05);
-            padding: 60px 40px;
-            border-radius: 30px;
-            margin-top: 150px;
-        }
-
-        .quote {
-            font-size: 1.5rem;
+            font-size: 1.4rem;
+            font-family: 'Nanum Myeongjo', serif;
             font-style: italic;
-            margin-bottom: 30px;
-            color: var(--kanna-blue);
+            padding: 60px;
+            background: linear-gradient(45deg, rgba(25, 113, 194, 0.1), rgba(0,0,0,0));
+            border-radius: 30px;
         }
 
-        footer {
-            text-align: center;
-            padding: 100px 20px;
-            opacity: 0.5;
-            font-size: 0.8rem;
-        }
+        footer { text-align: center; padding: 100px 0; opacity: 0.6; }
 
-        /* Animation */
-        .fade-in { opacity: 0; transform: translateY(20px); transition: 1s; }
-        .fade-in.visible { opacity: 1; transform: translateY(0); }
+        @media (max-width: 768px) {
+            .profile-grid { grid-template-columns: 1fr; }
+            .main-title { font-size: 3rem; }
+        }
     </style>
 </head>
 <body>
 
+    <div id="nebula"></div>
     <canvas id="stars"></canvas>
 
-    <header>
-        <div class="hero-title">AIRI KANNA</div>
-        <div class="hero-sub">2022.08.20 — 2024.12.02</div>
-    </header>
+    <div class="container">
+        <!-- 메인 헤더 -->
+        <header>
+            <div class="main-title">아이리 칸나</div>
+            <p class="hero-sub">AIRI KANNA | THE FIRST STELLIVE</p>
+            <p style="margin-top: 20px; opacity: 0.8;">"푸른 비늘을 반짝이며 노래하는, 영원한 우리의 용소녀"</p>
+        </header>
 
-    <!-- Timeline Section -->
-    <section class="fade-in">
-        <h2>Milestones</h2>
-        <div class="timeline">
-            <div class="timeline-item">
-                <div class="date">2023.01.07</div>
-                <div class="event-title">StelLive 1기생 재데뷔</div>
-                <div class="event-desc">강렬한 가창력과 함께 스텔라이브의 시작을 알린 용소녀의 강림.</div>
+        <!-- 상세 프로필 -->
+        <section>
+            <h2 class="sec-title">Profile</h2>
+            <div class="profile-grid">
+                <div class="profile-info">
+                    <h3>아이리 칸나 (Airi Kanna)</h3>
+                    <ul>
+                        <li><b>종족</b> 푸른 용</li>
+                        <li><b>생일</b> 2024년 2월 11일 (기존 설정)</li>
+                        <li><b>상징색</b> #a5d8ff (Kanna Blue)</li>
+                        <li><b>소속</b> 스텔라이브 (StelLive) 1기생 미스틱(Mystic)</li>
+                        <li><b>팬덤명</b> 비늘이 (Binuel-i)</li>
+                    </ul>
+                </div>
+                <div class="profile-info">
+                    <h3>Specialty</h3>
+                    <p>압도적인 성량과 고음, 감성적인 보컬이 특징인 스텔라이브의 메인 보컬리스트. 락, 발라드, J-POP 등 장르를 가리지 않는 가창 실력을 보유하고 있습니다.</p>
+                </div>
             </div>
-            <div class="timeline-item">
-                <div class="date">2023.05.21</div>
-                <div class="event-title">1st Single [ADDICT!ON] 발매</div>
-                <div class="event-desc">국내 버추얼 아티스트로서 독보적인 음원 파워를 입증.</div>
-            </div>
-            <div class="timeline-item">
-                <div class="date">2023.11.18</div>
-                <div class="event-title">3D Debut Showcase</div>
-                <div class="event-desc">웅장한 무대 위에서 황녀님의 자태를 드러낸 역사적인 순간.</div>
-            </div>
-            <div class="timeline-item">
-                <div class="date">2024.01.27</div>
-                <div class="event-title">1st Solo Concert [KANNA]</div>
-                <div class="event-desc">첫 단독 오프라인 콘서트를 성황리에 개최.</div>
-            </div>
-            <div class="timeline-item">
-                <div class="date">2024.12.02</div>
-                <div class="event-title">Last Concert [The Finale] & Graduation</div>
-                <div class="event-desc">비늘이들과 함께한 700일의 여정을 마무리하는 최종화.</div>
-            </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Music Section -->
-    <section class="fade-in">
-        <h2>Discography & Covers</h2>
-        <div class="music-grid">
-            <!-- Original Songs -->
-            <a href="https://www.youtube.com/watch?v=S8p9ZpPZ2zE" target="_blank" class="music-card">
-                <span class="music-type">Original</span>
-                <span class="music-name">ADDICT!ON</span>
-                <p class="music-info">칸나의 아이덴티티가 담긴 첫 번째 싱글곡.</p>
-            </a>
-            <a href="https://www.youtube.com/watch?v=pAnVfH8D_4M" target="_blank" class="music-card">
-                <span class="music-type">Original</span>
-                <span class="music-name">최종화 (The Last Flower)</span>
-                <p class="music-info">애절한 감성과 폭발적인 고음이 돋보이는 곡.</p>
-            </a>
-            <a href="https://www.youtube.com/watch?v=0kL9v3fUe08" target="_blank" class="music-card">
-                <span class="music-type">Original</span>
-                <span class="music-name">푸른 보석과 어린 용</span>
-                <p class="music-info">팬들을 향한 진심을 담은 따뜻한 찬가.</p>
-            </a>
+        <!-- 역사 (연대기) -->
+        <section>
+            <h2 class="sec-title">History & Achievements</h2>
+            <div class="history-list">
+                <div class="history-item">
+                    <div class="history-date">2023.01.07</div>
+                    <div class="history-content">
+                        <strong>StelLive 정식 재데뷔</strong><br>
+                        강지 대표가 이끄는 스텔라이브의 첫 주자로 출격하여 트위치 버추얼 생태계에 큰 반향을 일으킴.
+                    </div>
+                </div>
+                <div class="history-item">
+                    <div class="history-date">2023.05.26</div>
+                    <div class="history-content">
+                        <strong>1st Single [ADDICT!ON] 발매</strong><br>
+                        벅스 실시간 차트 1위, 멜론 최신 차트 상위권 진입 등 버추얼 아티스트로서 이례적인 음원 성적 기록.
+                    </div>
+                </div>
+                <div class="history-item">
+                    <div class="history-date">2023.11.18</div>
+                    <div class="history-content">
+                        <strong>3D 쇼케이스 및 모델링 공개</strong><br>
+                        정교한 풀 트래킹 3D 모델을 공개하며 '황녀님'이라는 별칭에 걸맞은 무대를 선보임.
+                    </div>
+                </div>
+                <div class="history-item">
+                    <div class="history-date">2024.01.27</div>
+                    <div class="history-content">
+                        <strong>단독 콘서트 [KANNA] 개최</strong><br>
+                        메가박스 생중계와 오프라인 공연을 통해 팬들과 직접 호흡하며 폭발적인 라이브 실력을 증명.
+                    </div>
+                </div>
+                <div class="history-item">
+                    <div class="history-date">2024.05</div>
+                    <div class="history-content">
+                        <strong>오리콘 차트 진입</strong><br>
+                        일본 오리지널 음원 활동을 통해 글로벌 시장에서의 가능성 확장.
+                    </div>
+                </div>
+                <div class="history-item">
+                    <div class="history-date">2024.12.02</div>
+                    <div class="history-content">
+                        <strong>The Final Flower - 최종화</strong><br>
+                        2년간의 긴 여정을 마무리하며 스텔라이브 졸업.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 뮤직 아카이브 -->
+        <section id="music">
+            <h2 class="sec-title">Music Archive</h2>
             
-            <!-- Cover Songs -->
-            <a href="https://www.youtube.com/watch?v=Opx_G_Ounp4" target="_blank" class="music-card">
-                <span class="music-type">Cover</span>
-                <span class="music-name">역광 (Backlight)</span>
-                <p class="music-info">칸나의 파워풀한 보컬을 세상에 알린 전설의 커버.</p>
-            </a>
-            <a href="https://www.youtube.com/watch?v=8mGf9WvH2-E" target="_blank" class="music-card">
-                <span class="music-type">Cover</span>
-                <span class="music-name">나는 최강 (I'm Invincible)</span>
-                <p class="music-info">듣는 이에게 용기를 주는 압도적인 성량.</p>
-            </a>
-            <a href="https://www.youtube.com/watch?v=S0T0E9S-M9c" target="_blank" class="music-card">
-                <span class="music-type">Cover</span>
-                <span class="music-name">주문 (Mirotic)</span>
-                <p class="music-info">색다른 분위기로 재해석한 매혹적인 보컬.</p>
-            </a>
-        </div>
-    </section>
+            <div class="music-category">
+                <div class="category-name">Original Singles</div>
+                <div class="music-grid">
+                    <a href="https://youtu.be/S8p9ZpPZ2zE" class="music-card" target="_blank">
+                        <span class="m-title">ADDICT!ON</span>
+                        <span class="m-desc">전설의 시작이 된 첫 오리지널 싱글.</span>
+                    </a>
+                    <a href="https://youtu.be/pAnVfH8D_4M" class="music-card" target="_blank">
+                        <span class="m-title">최종화 (The Last Flower)</span>
+                        <span class="m-desc">칸나의 감성이 집약된 고난도의 발라드곡.</span>
+                    </a>
+                    <a href="https://youtu.be/0kL9v3fUe08" class="music-card" target="_blank">
+                        <span class="m-title">푸른 보석과 어린 용</span>
+                        <span class="m-desc">팬들을 향한 고마움을 노래한 팬송.</span>
+                    </a>
+                </div>
+            </div>
 
-    <!-- Final Chapter -->
-    <section class="final-chapter fade-in">
-        <div class="quote">"내 푸른 비늘은 여러분의 사랑으로 빛날 수 있었습니다."</div>
-        <p>함께 웃고 울었던 모든 순간들이 이제 하나의 별자리가 되어 우리 위를 비춥니다.<br>
-        아이리 칸나라는 이름의 책은 잠시 덮이지만, 그녀의 노래는 영원히 멈추지 않을 것입니다.</p>
-    </section>
+            <div class="music-category">
+                <div class="category-name">Legendary Covers</div>
+                <div class="music-grid">
+                    <a href="https://youtu.be/Opx_G_Ounp4" class="music-card" target="_blank">
+                        <span class="m-title">역광 (Backlight)</span>
+                        <span class="m-desc">조회수 수백만을 기록한 칸나의 대표 커버곡.</span>
+                    </a>
+                    <a href="https://youtu.be/8mGf9WvH2-E" class="music-card" target="_blank">
+                        <span class="m-title">나는 최강 (I'm Invincible)</span>
+                        <span class="m-desc">압도적인 고음 셔틀의 면모를 보여준 곡.</span>
+                    </a>
+                    <a href="https://youtu.be/S0T0E9S-M9c" class="music-card" target="_blank">
+                        <span class="m-title">주문 (MIROTIC)</span>
+                        <span class="m-desc">섹시하고 중후한 보컬 톤의 재발견.</span>
+                    </a>
+                    <a href="https://youtu.be/r-P97D87uV8" class="music-card" target="_blank">
+                        <span class="m-title">유령도쿄 (Ghost City Tokyo)</span>
+                        <span class="m-desc">특유의 그루브함이 묻어나는 커버.</span>
+                    </a>
+                    <a href="https://youtu.be/9POnR6VzG7k" class="music-card" target="_blank">
+                        <span class="m-title">심해소녀 (Deep Sea Girl)</span>
+                        <span class="m-desc">심해에서 올라온 용의 목소리.</span>
+                    </a>
+                </div>
+            </div>
+        </section>
 
-    <footer>
-        <p>This page is a tribute to Airi Kanna.</p>
-        <p>&copy; 2024 We will remember our Blue Dragon.</p>
-    </footer>
+        <!-- 어록 -->
+        <section>
+            <h2 class="sec-title">Words of Kanna</h2>
+            <div class="quote-card">
+                "여러분의 목소리가 있는 곳이라면, 나는 어디서든 노래할 수 있어. <br>
+                내가 비늘이들의 자랑이 될 수 있게 해줘서 고마워."
+            </div>
+        </section>
+
+        <footer>
+            <p>아이리 칸나의 찬란했던 700일을 기억합니다.</p>
+            <p>Airi Kanna Archive | Powered by Memory</p>
+        </footer>
+    </div>
 
     <script>
-        // Star Background
+        // --- 별 배경 애니메이션 ---
         const canvas = document.getElementById('stars');
         const ctx = canvas.getContext('2d');
         let width, height, stars = [];
 
-        function init() {
+        function resize() {
             width = window.innerWidth;
             height = window.innerHeight;
             canvas.width = width;
             canvas.height = height;
-            stars = [];
-            for (let i = 0; i < 200; i++) {
-                stars.push({
-                    x: Math.random() * width,
-                    y: Math.random() * height,
-                    size: Math.random() * 2,
-                    speed: Math.random() * 0.5
-                });
-            }
         }
 
-        function animate() {
+        window.addEventListener('resize', resize);
+        resize();
+
+        for (let i = 0; i < 400; i++) {
+            stars.push({
+                x: Math.random() * width,
+                y: Math.random() * height,
+                size: Math.random() * 1.5,
+                speed: Math.random() * 0.2 + 0.05,
+                opacity: Math.random()
+            });
+        }
+
+        function draw() {
             ctx.clearRect(0, 0, width, height);
-            ctx.fillStyle = '#fff';
             stars.forEach(s => {
+                ctx.globalAlpha = s.opacity;
+                ctx.fillStyle = '#fff';
                 ctx.beginPath();
                 ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
                 ctx.fill();
-                s.y += s.speed;
-                if (s.y > height) s.y = 0;
+                
+                s.y -= s.speed;
+                if (s.y < 0) s.y = height;
             });
-            requestAnimationFrame(animate);
+            requestAnimationFrame(draw);
         }
+        draw();
 
-        // Scroll Animation
+        // --- 스크롤 애니메이션 (Intersection Observer) ---
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if (entry.isIntersecting) entry.target.classList.add('visible');
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
             });
         }, { threshold: 0.1 });
 
-        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-
-        window.addEventListener('resize', init);
-        init();
-        animate();
+        document.querySelectorAll('section').forEach(section => {
+            section.style.opacity = '0';
+            section.style.transform = 'translateY(30px)';
+            section.style.transition = 'all 1s ease-out';
+            observer.observe(section);
+        });
     </script>
 </body>
 </html>
